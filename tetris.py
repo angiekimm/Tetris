@@ -283,15 +283,15 @@ def draw_next_shape(shape, surface): #넥스트 쉐입 그려주기
 def update_score(nscore):
     score = max_score()
 
-    with open('study/scores.txt', 'w') as f:
+    with open('scores.txt', 'w') as f:
         if int(score) > nscore:
             f.write(str(score))
         else:
             f.write(str(nscore))
 
 
-def max_score():
-    with open('study/scores.txt', 'r') as f:
+def max_score(): #제일 윗줄에 있는 점수 읽음
+    with open('scores.txt', 'r') as f:
         lines = f.readlines()
         score = lines[0].strip()
 
@@ -336,6 +336,13 @@ def draw_window(surface, grid, score, last_score):
     # 그리드 하얀줄 그리기
     draw_grid( surface, grid )
 
+def drop_bottom(current_piece, grid):
+    space = True
+    while space:
+        current_piece.y += 1
+        if not( valid_space(current_piece, grid) ):
+            current_piece.y -= 1
+            space = False
 
 # 게임시작!
 def main( win ):
@@ -406,8 +413,8 @@ def main( win ):
                     if not( valid_space(current_piece, grid) ):
                         current_piece.rotation -= 1
 
-                # if event.key == pygame.K_SPACE:
-                    
+                if event.key == pygame.K_SPACE:
+                    drop_bottom(current_piece, grid)
 
 
         # 블록의 위치를 계속 확인해줘야해서 있는 코드(1차원에 current_piece 위치 저장)
